@@ -59,15 +59,9 @@ int spawnObjects(LevelEditorLayer* editor, const std::vector<Object>& objects) {
 }
 
 CCSprite* makeButton(const char* caption) {
-    auto* sprite=CCSprite::createWithSpriteFrameName("GJ_button_01.png");
+    auto* sprite=ButtonSprite::create(caption);
     if(!sprite) return nullptr;
     sprite->setScale(0.78f);
-    auto* text=CCLabelBMFont::create(caption,"bigFont.fnt");
-    if(text) {
-        text->setScale(0.60f);
-        text->setPosition(CCPoint{sprite->getContentSize().width / 2.f, sprite->getContentSize().height / 2.f});
-        sprite->addChild(text);
-    }
     return sprite;
 }
 
@@ -238,18 +232,18 @@ class $modify(RhythmBuilderUI, EditorUI) {
         menu->setID("rhythm-builder-menu");
         menu->setPosition({0,0});
         this->addChild(menu,200);
-        auto* sprite=CCSprite::createWithSpriteFrameName("GJ_button_01.png");
-        if(!sprite) return true;
+        auto* sprite=makeButton("GEN");
+        if(!sprite) {
+            log::error("Unable to create Rhythm Builder button");
+            return true;
+        }
         sprite->setScale(.67f);
-        auto* label=CCLabelBMFont::create("GEN","bigFont.fnt");
-        label->setScale(.65f);
-        label->setPosition(CCPoint{sprite->getContentSize().width / 2.f, sprite->getContentSize().height / 2.f});
-        sprite->addChild(label);
         auto* button=CCMenuItemSpriteExtra::create(sprite,nullptr,this,menu_selector(RhythmBuilderUI::onRhythmBuilder));
         const auto win=CCDirector::sharedDirector()->getWinSize();
-        button->setPosition({win.width-54.f,win.height-75.f});
+        button->setPosition({win.width/2.f,win.height-49.f});
         button->setID("rhythm-builder-open-button");
         menu->addChild(button);
+        log::info("Rhythm Builder GEN button added at {}, {}", win.width/2.f, win.height-49.f);
         return true;
     }
     void onRhythmBuilder(CCObject*) {
