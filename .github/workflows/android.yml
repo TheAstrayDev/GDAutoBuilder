@@ -37,6 +37,7 @@ jobs:
             os: ubuntu-latest
           - target: Win64
             os: windows-latest
+            configure-args: -DGEODE_GD_VERSION=2.2091 -DGEODE_COMP_GD_VERSION=22091
     steps:
       - uses: actions/checkout@v7
       - name: Build Geode package
@@ -45,6 +46,8 @@ jobs:
         with:
           target: ${{ matrix.target }}
           sdk: given
+          bindings-ref: 6cb610f8478561efe96c45dd1cc8723c498c0464
+          configure-args: ${{ matrix.configure-args }}
       - name: Upload mod
         uses: actions/upload-artifact@v7
         with:
