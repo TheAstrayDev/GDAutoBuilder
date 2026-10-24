@@ -78,6 +78,15 @@ class GeneratorPopup : public Popup {
     int m_song=0;
     Difficulty m_difficulty=Difficulty::Normal;
 
+#ifdef GEODE_IS_WINDOWS
+    void onDismiss(CCObject*) {
+        setTouchEnabled(false);
+        setKeypadEnabled(false);
+        removeFromParentAndCleanup(true);
+    }
+    void keyBackClicked() override { onDismiss(nullptr); }
+#endif
+
     void refresh() {
         if(m_songLabel) m_songLabel->setString(officialSongs()[m_song].name);
         if(m_diffLabel) {
@@ -156,6 +165,41 @@ class GeneratorPopup : public Popup {
     bool init(LevelEditorLayer* editor) {
 #ifdef GEODE_IS_WINDOWS
         if(!FLAlertLayer::init(nullptr, "RHYTHM BUILDER", "", "Close", nullptr, 385.f, false, 300.f, 1.f)) return false;
+        // FLAlertLayer uses screen coordinates and routes input through its
+        // own menu. Keep that menu, but build a fixed local panel around it.
+        m_buttonMenu->retain();
+        m_mainLayer->removeAllChildrenWithCleanup(true);
+        m_mainLayer->addChild(m_buttonMenu, 10);
+        m_buttonMenu->release();
+        m_buttonMenu->removeAllChildrenWithCleanup(true);
+        m_button1=nullptr;
+        m_button2=nullptr;
+        m_scrollingLayer=nullptr;
+        m_noElasticity=true;
+        const auto win=CCDirector::sharedDirector()->getWinSize();
+        m_mainLayer->ignoreAnchorPointForPosition(false);
+        m_mainLayer->setAnchorPoint({.5f,.5f});
+        m_mainLayer->setContentSize({385.f,255.f});
+        m_mainLayer->setPosition({win.width/2.f,win.height/2.f});
+        m_buttonMenu->ignoreAnchorPointForPosition(false);
+        m_buttonMenu->setAnchorPoint({0,0});
+        m_buttonMenu->setContentSize({385.f,255.f});
+        m_buttonMenu->setPosition({0,0});
+        auto* background=extension::CCScale9Sprite::create("GJ_square01.png");
+        if(!background) return false;
+        background->setContentSize({385.f,255.f});
+        background->setPosition({192.5f,127.5f});
+        m_mainLayer->addChild(background,-1);
+        auto* title=CCLabelBMFont::create("RHYTHM BUILDER","goldFont.fnt");
+        title->setScale(.7f);
+        title->setPosition({192.5f,233.f});
+        m_mainLayer->addChild(title);
+        auto* closeSprite=CCSprite::createWithSpriteFrameName("GJ_closeBtn_001.png");
+        if(!closeSprite) return false;
+        closeSprite->setScale(.65f);
+        auto* closeButton=CCMenuItemSpriteExtra::create(closeSprite,nullptr,this,menu_selector(GeneratorPopup::onDismiss));
+        closeButton->setPosition({8.f,247.f});
+        m_buttonMenu->addChild(closeButton);
 #else
         if(!Popup::init(385.f,255.f)) return false;
 #endif
@@ -167,9 +211,8 @@ class GeneratorPopup : public Popup {
 #ifndef GEODE_IS_WINDOWS
         this->setTitle("RHYTHM BUILDER");
 #endif
-        auto* menu=CCMenu::create();
+        auto* menu=m_buttonMenu;
         menu->setPosition({0,0});
-        m_mainLayer->addChild(menu,10);
         auto label=[&](const char* txt,float x,float y,float scale) {
             auto* l=CCLabelBMFont::create(txt,"goldFont.fnt");
             l->setScale(scale); l->setPosition({x,y});
@@ -196,7 +239,7 @@ class GeneratorPopup : public Popup {
         for(int i=0;i<6;i++) {
             auto* spr=CCSprite::createWithSpriteFrameName(icons[i]);
             if(!spr) continue;
-            spr->setScale(.37f);
+            spr->setScale(.65f);
             auto* btn=CCMenuItemSpriteExtra::create(spr,nullptr,this,menu_selector(GeneratorPopup::onDifficulty));
             btn->setTag(i); btn->setPosition({60.f+i*53.f,108.f});
             menu->addChild(btn);m_diffButtons.push_back(btn);
