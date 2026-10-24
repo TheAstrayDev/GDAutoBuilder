@@ -1,0 +1,47 @@
+name: Android builds
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Generator core tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run core and WAV tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build-tests
+          for test in core wav; do
+            g++ -std=c++23 -O2 -Wall -Wextra src/GeneratorCore.cpp "tests/test_${test}.cpp" -o "build-tests/test_${test}"
+            "build-tests/test_${test}"
+          done
+  build:
+    name: Geode ${{ matrix.target }}
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [Android32, Android64]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Geode package
+        id: geode
+        uses: geode-sdk/build-geode-mod@a0f7676e6fcd1a584f6d0c1c800239008412defc # main
+        with:
+          target: ${{ matrix.target }}
+          sdk: given
+      - name: Upload mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhythm-builder-${{ matrix.target }}
+          path: ${{ steps.geode.outputs.build-output }}
+          if-no-files-found: error

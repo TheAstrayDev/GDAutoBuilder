@@ -1,0 +1,10 @@
+{
+  "geode": "5.8.2",
+  "gd": {"android":"2.2081", "win":"2.2081"},
+  "id": "autobuilder.rhythm-layout",
+  "name": "Rhythm Layout Builder",
+  "version": "v0.1.0",
+  "developer": "Community Prototype",
+  "description": "Editor layout + basic decoration + trigger generation with rhythm presets and optional full WAV onset scan.",
+  "tags": ["editor", "music", "utility", "offline"]
+}
