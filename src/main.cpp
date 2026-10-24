@@ -1,8 +1,11 @@
 // Geode 5.x / Geometry Dash Android 2.2081 proof-of-concept.
 // Original rhythm planner and UI. No cloud AI, copyrighted audio, or playtest bot.
-#include <Geode/Geode.hpp>
+#include <Geode/Bindings.hpp>
+#include <Geode/Loader.hpp>
 #include <Geode/modify/EditorUI.hpp>
+#ifndef GEODE_IS_WINDOWS
 #include <Geode/ui/Popup.hpp>
+#endif
 #include "GeneratorCore.hpp"
 #include <algorithm>
 #include <map>
