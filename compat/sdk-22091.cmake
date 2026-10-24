@@ -1,0 +1,15 @@
+# Cocos ABI additions from geode-sdk/geode v6 commit
+# 2727299790ef1dfc036c848ff9dbe00c44052087, used with the stable v5 loader.
+set(cocos "$ENV{GEODE_SDK}/loader/include/Geode/cocos")
+configure_file("${CMAKE_CURRENT_LIST_DIR}/CCTouchClipper.h" "${cocos}/robtop/touch_dispatcher/CCTouchClipper.h" COPYONLY)
+configure_file("${CMAKE_CURRENT_LIST_DIR}/CCKeyboardActionManager.h" "${cocos}/robtop/keyboard_dispatcher/CCKeyboardActionManager.h" COPYONLY)
+file(READ "${cocos}/base_nodes/CCNode.h" content)
+if(NOT content MATCHES "virtual void offsetPosition")
+    string(REPLACE "virtual float getPositionY(void);" "virtual float getPositionY(void);\n    virtual void offsetPosition(float, float);\n    virtual void applyScale(float);" content "${content}")
+    file(WRITE "${cocos}/base_nodes/CCNode.h" "${content}")
+endif()
+file(READ "${cocos}/robtop/keyboard_dispatcher/CCKeyboardDelegate.h" content)
+if(NOT content MATCHES "virtual bool handleAction")
+    string(REPLACE "virtual void keyUp(enumKeyCodes key, double) {}" "virtual void keyUp(enumKeyCodes key, double) {}\n    virtual bool handleAction(int, bool, double) { return false; }" content "${content}")
+    file(WRITE "${cocos}/robtop/keyboard_dispatcher/CCKeyboardDelegate.h" "${content}")
+endif()

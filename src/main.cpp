@@ -68,7 +68,11 @@ CCSprite* makeButton(const char* caption) {
     return sprite;
 }
 
+#ifdef GEODE_IS_WINDOWS
+class GeneratorPopup : public FLAlertLayer {
+#else
 class GeneratorPopup : public Popup {
+#endif
     LevelEditorLayer* m_editor=nullptr;
     CCLabelBMFont* m_songLabel=nullptr;
     CCLabelBMFont* m_diffLabel=nullptr;
@@ -153,13 +157,19 @@ class GeneratorPopup : public Popup {
                              " +"+std::to_string(added)+" objects").c_str());
     }
     bool init(LevelEditorLayer* editor) {
+#ifdef GEODE_IS_WINDOWS
+        if(!FLAlertLayer::init(nullptr, "RHYTHM BUILDER", "", "Close", nullptr, 385.f, false, 300.f, 1.f)) return false;
+#else
         if(!Popup::init(385.f,255.f)) return false;
+#endif
         m_editor=editor;
         if(auto it=runs.find(editor);it!=runs.end()) {
             m_song=it->second.song;
             m_difficulty=it->second.difficulty;
         }
+#ifndef GEODE_IS_WINDOWS
         this->setTitle("RHYTHM BUILDER");
+#endif
         auto* menu=CCMenu::create();
         menu->setPosition({0,0});
         m_mainLayer->addChild(menu,10);
