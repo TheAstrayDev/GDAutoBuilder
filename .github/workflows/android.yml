@@ -1,4 +1,4 @@
-name: Android builds
+name: Geode builds
 on:
   workflow_dispatch:
   push:
@@ -25,12 +25,18 @@ jobs:
   build:
     name: Geode ${{ matrix.target }}
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        target: [Android32, Android64]
+        include:
+          - target: Android32
+            os: ubuntu-latest
+          - target: Android64
+            os: ubuntu-latest
+          - target: Win64
+            os: windows-latest
     steps:
       - uses: actions/checkout@v7
       - name: Build Geode package
