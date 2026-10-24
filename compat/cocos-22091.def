@@ -1,0 +1,14 @@
+LIBRARY libcocos2d.dll
+EXPORTS
+?applyScale@CCNode@cocos2d@@UEAAXM@Z
+?handleGlobalAction@CCKeyboardActionManager@cocos2d@@UEAA_NH_N@Z
+?loadRootSubDictFromCompressedFile@DS_Dictionary@@QEAA_NPEBD_N@Z
+?loadRootSubDictFromFile@DS_Dictionary@@QEAA_NPEBD@Z
+?loadRootSubDictFromString@DS_Dictionary@@QEAA_NAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+?offsetPosition@CCNode@cocos2d@@UEAAXMM@Z
+?registerForcePrio@CCTouchDispatcher@cocos2d@@QEAAXPEAVCCObject@2@HH@Z
+?saveRootSubDictToCompressedFile@DS_Dictionary@@QEAA_NPEBD_N@Z
+?saveRootSubDictToFile@DS_Dictionary@@QEAA_NPEBD@Z
+?saveRootSubDictToString@DS_Dictionary@@QEAA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+?stepBackToRootSubDict@DS_Dictionary@@QEAAXXZ
+?unregisterForcePrio@CCTouchDispatcher@cocos2d@@QEAAXPEAVCCObject@2@@Z
