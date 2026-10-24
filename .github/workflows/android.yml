@@ -12,7 +12,7 @@ jobs:
     name: Generator core tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and run core and WAV tests
         shell: bash
         run: |
@@ -32,7 +32,7 @@ jobs:
       matrix:
         target: [Android32, Android64]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build Geode package
         id: geode
         uses: geode-sdk/build-geode-mod@a0f7676e6fcd1a584f6d0c1c800239008412defc # main
@@ -40,7 +40,7 @@ jobs:
           target: ${{ matrix.target }}
           sdk: given
       - name: Upload mod
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rhythm-builder-${{ matrix.target }}
           path: ${{ steps.geode.outputs.build-output }}

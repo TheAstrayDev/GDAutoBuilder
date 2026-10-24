@@ -24,13 +24,13 @@
 
 ## Как собрать Android `.geode` (через GitHub Actions)
 
-1. Создай репозиторий GitHub и загрузи **содержимое** этой папки в корень репозитория, включая скрытую папку `.github`.
+1. Исходники размещены в [TheAstrayDev/GDAutoBuilder](https://github.com/TheAstrayDev/GDAutoBuilder). Workflow находится в `.github/workflows/android.yml`.
 2. Открой вкладку **Actions**, выбери **Android builds** и нажми **Run workflow** (либо произойдёт сборка при push).
 3. При успешной сборке в **Artifacts** появится `rhythm-builder-Android64` или `rhythm-builder-Android32`. Скачай архив и извлеки из него `.geode`-файл.
 4. Положи `.geode` в папку модов Geode на устройстве (пример для Android: `/storage/emulated/0/Android/media/com.geode.launcher/game/geode/mods/`) или воспользуйся менеджером модов в Geode.
 5. Запусти Geometry Dash -> Создать -> Редактор **пустого уровня** -> нажми **GEN**.
 
-**Важно:** workflow включён как инструкция для сборки, но компиляция с SDK и запуск на Android в этой среде не производились; могут потребоваться изменения кода под точные версии SDK и GD.
+Workflow сначала запускает тесты ядра и WAV-анализатора, затем собирает Android32 и Android64 с Geode SDK из `mod.json`. Результаты сборок доступны во вкладке [Actions](https://github.com/TheAstrayDev/GDAutoBuilder/actions/workflows/android.yml). Успешная компиляция не заменяет проверку мода в игре на Android; такая проверка пока не выполнена.
 
 ## Дополнительный анализ трека
 

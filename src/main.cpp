@@ -37,7 +37,7 @@ int spawnObjects(LevelEditorLayer* editor, const std::vector<Object>& objects) {
             if(spec.targetGroup) fx->m_targetGroupID=spec.targetGroup;
             if(spec.id==901) {
                 fx->m_duration=spec.duration;
-                fx->m_moveOffset={spec.dx, spec.dy};
+                fx->m_moveOffset=CCPoint{spec.dx, spec.dy};
             } else if (spec.id==1006) {
                 fx->m_triggerTargetColor={spec.r,spec.g,spec.b};
                 fx->m_fadeInDuration=spec.fadeIn;
